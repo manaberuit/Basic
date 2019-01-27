@@ -39,15 +39,14 @@ $link = get_db_connect();
 if ($request_method === 'POST' && count($errors) === 0) {
 
   // 現在日時を取得
-  $now_date = date('Y-m-d H:i:s');
-
+  //$now_date = date('Y-m-d H:i:s');
+  
   try {
 
     insert_post($link, $user_name, $user_comment);
-
     // リロード対策でリダイレクト
-    header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    //header('Location: http://' . './controller.php');
+    //header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    header('Location: http://' . './controller.php');
     exit;
 
   } catch (PDOException $e) {
@@ -64,3 +63,4 @@ $data = entity_assoc_array($data);
 
 // テンプレートファイル読み込み
 include_once './view/post_comment.php';
+?>

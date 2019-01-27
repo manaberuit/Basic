@@ -9,7 +9,7 @@
   <header>
     <div class="header-box">
       <a href="./top.php">
-        <img class="logo" src="./images/logo.png" alt="CodeSHOP">
+        <img class="logo" src="./images/logo.png" alt="ログイン画面">
       </a>
       <a href="./cart.php" class="cart"></a>
     </div>

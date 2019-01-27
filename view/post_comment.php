@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>ひとこと掲示板</h1>
-<form action="controller.php" method="post">
+<form action="./controller.php" method="post">
   <?php if (count($errors) > 0) { ?>
   <ul>
     <?php foreach ($errors as $error) { ?>
@@ -29,6 +29,7 @@
       foreach ($data as $value) {
     ?>
     <li>
+      <input type="submit" value="削除 "name="id">
       <?php print $value['user_name'];?>:
       <?php print $value['user_comment'];?>
     </li>

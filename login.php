@@ -48,7 +48,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_name'] = $user_name;
 
             $url_root = dirname($_SERVER['REQUEST_URI']).'/';
-            header('Location: http://'. $_SERVER['HTTP_HOST'] . $url_root . './view/post_comment.php');
+            header('Location: http://'. $_SERVER['HTTP_HOST'] . $url_root . './controller.php');
+            //header('Location: http://'. $_SERVER['HTTP_HOST'] . $url_root . './view/post_comment.php');
         } else {
             $err_msg[] = 'ユーザー名あるいはパスワードが違います';
         }
