@@ -213,15 +213,14 @@ function check_user_name($user_name) {
   }
 
 //コメント削除
-function delete_post($dbh, $user_name, $user_comment) {
+function delete_post($dbh, $id) {
     try {
         // SQL文を作成
-        $sql = 'DELETE FROM post WHERE user_name = ? AND user_comment = ?';
+        $sql = 'DELETE FROM post WHERE id = ?';
         // SQL文を実行する準備
         $stmt = $dbh->prepare($sql);
         // SQL文のプレースホルダに値をバインド
-        $stmt->bindValue(1, $user_name, PDO::PARAM_STR);
-        $stmt->bindValue(2, $user_comment, PDO::PARAM_STR);
+        $stmt->bindValue(1, $id, PDO::PARAM_INT);
         // SQLを実行
         $stmt->execute();
     } catch (PDOException $e) {

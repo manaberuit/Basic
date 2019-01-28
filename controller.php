@@ -58,7 +58,7 @@ if ($request_method === 'POST' && count($errors) === 0) {
 //コメント削除
 if ($sql_kind === 'delete_post'){
     try {
-      delete_post($dbh, $user_name, $user_comment);
+      delete_post($dbh, $id);
       // リロード対策でリダイレクト
       header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
       //header('Location: http://' . './controller.php');
