@@ -29,9 +29,13 @@
       foreach ($data as $value) {
     ?>
     <li>
-      <input type="submit" value="削除 "name="id">
+    <form action="./controller.php" method="post">
+    <input type="submit" value="削除"> 
+    <input type="hidden" name="id" value="<?php print $value['id']; ?>">
+    <input type="hidden" name="sql_kind" value="delete_post">
       <?php print $value['user_name'];?>:
       <?php print $value['user_comment'];?>
+    </form>
     </li>
     <?php
       }

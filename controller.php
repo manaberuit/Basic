@@ -9,7 +9,7 @@ require_once './model/func.php';
 
 $errors = array();
 $data   = array();
-
+$sql_kind = '';
 $request_method = get_request_method();
 
 if ($request_method === 'POST'){
@@ -55,11 +55,26 @@ if ($request_method === 'POST' && count($errors) === 0) {
 
 }
 
+//コメント削除
+if ($sql_kind === 'delete_post'){
+    try {
+      delete_post($dbh, $user_name, $user_comment);
+      // リロード対策でリダイレクト
+      header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+      //header('Location: http://' . './controller.php');
+      exit;
+    } catch (PDOException $e) {
+      $errors[] = '削除失敗。理由'.$e->getMessage();
+    }
+  }
+
 // 掲示板の書き込み一覧を取得する
 $data = get_post_list($link);
 
 // 特殊文字をHTMLエンティティに変換する
 $data = entity_assoc_array($data);
+
+
 
 // テンプレートファイル読み込み
 include_once './view/post_comment.php';
