@@ -41,12 +41,10 @@ var_dump($_POST['delete']);
 var_dump($_POST['id']);
 var_dump($_POST['submit']);
 if ($request_method === 'POST' && count($errors) === 0) {
-
-  // 現在日時を取得
-  //$now_date = date('Y-m-d H:i:s');
-
-if ($_POST['delete'] === '削除'){
-  try {
+  //if ($_POST['delete'] === "削除"){
+  if (isset($_POST['delete'])){
+    $id = $_POST['id'];
+    try {
     delete_post($link, $id);
     // リロード対策でリダイレクト
     header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -56,13 +54,12 @@ if ($_POST['delete'] === '削除'){
     $errors[] = '削除失敗。理由'.$e->getMessage();
   } 
   
-if (isset($_POST['submit']) !== ''){
+  if (isset($_POST['submit'])){
   try {
 
     insert_post($link, $user_name, $user_comment);
     // リロード対策でリダイレクト
     header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    //header('Location: http://' . './controller.php');
     exit;
 
   } catch (PDOException $e) {
@@ -71,8 +68,6 @@ if (isset($_POST['submit']) !== ''){
 } 
 }
 }
-
-
 
 //コメント削除
 /*if (isset($_POST['delete']) === TRUE) { 
