@@ -9,10 +9,9 @@ require_once './model/func.php';
 
 $errors = array();
 $data   = array();
-//$sql_kind = '';
+$sql_kind = '';
 $request_method = get_request_method();
 $link = get_db_connect();
-$value['id'] = $_POST['id'];
 
 
 if ($request_method === 'POST'){
@@ -42,6 +41,8 @@ var_dump($_POST['delete']);
 var_dump($_POST['id']);
 var_dump($_POST['submit']);
 var_dump($_POST['sql_kind']);
+var_dump(get_post_data('id'));
+var_dump(get_post_data('sql_kind'));
 /*if ($request_method === 'POST' && count($errors) === 0) {
   if ($_POST['delete'] === "削除" || $_POST['sql_kind'] === "delete_post") { 
     $id = $_POST['id'];
@@ -74,21 +75,39 @@ var_dump($_POST['sql_kind']);
 
 //コメント削除
 if ($request_method === 'POST' && count($errors) === 0) {
+  $sql_kind = get_post_data('sql_kind');
+  //$id = $_POST['id'];
+  $id = get_post_data('id');
+  if ($sql_kind === 'delete_post') {
+    try {
+      delete_post($link, $id);
+      // リロード対策でリダイレクト
+      header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+      exit;
+    } catch (PDOException $e) {
+      $errors[] = '削除失敗。理由'.$e->getMessage();
+    }
+  }
+}
+
+
+//コメント削除
+/*if ($request_method === 'POST' && count($errors) === 0) {
+  $sql_kind = get_post_data('sql_kind');
   if ($_POST['delete'] === "削除" || $_POST['sql_kind'] === "delete_post") { 
-    $id = $_POST['id'];
+    $id = $_SESSION['id'];
         try {
           delete_post($link, $id);
           // リロード対策でリダイレクト
           header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-          //header('Location: ./controller.php');
           exit;
         } catch (PDOException $e) {
           $errors[] = '削除失敗。理由'.$e->getMessage();
         }
       }
-    }
+    }*/
 
-//コメント挿入
+//コメント挿入(OK)
 /*if (isset($_POST['submit'])){
     try {
   
@@ -99,8 +118,8 @@ if ($request_method === 'POST' && count($errors) === 0) {
   
     } catch (PDOException $e) {
       $errors[] = 'レコード追加失敗。理由'.$e->getMessage();
-    }
-  }*/
+  }
+}*/
 
 
 // 掲示板の書き込み一覧を取得する

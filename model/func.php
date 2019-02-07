@@ -186,10 +186,10 @@ function insert_post($dbh, $user_name, $user_comment) {
     } 
   }
 
-//掲示板の書き込み一覧を取得する(要修正)
+//掲示板の書き込み一覧を取得する
 function get_post_list($link) {
     // SQL生成
-    $sql = 'SELECT user_name, user_comment FROM post order by user_name asc ';
+    $sql = 'SELECT id, user_name, user_comment FROM post order by user_name asc ';
     // クエリ実行
     return get_as_array($link, $sql);
   }
@@ -225,6 +225,7 @@ function delete_post($dbh, $id) {
         $stmt->execute();
     } catch (PDOException $e) {
         throw $e;
+        //die($e->getMessage());
     }
 }
 ?>
