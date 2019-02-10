@@ -12,6 +12,8 @@ $data   = array();
 $sql_kind = '';
 $request_method = get_request_method();
 $link = get_db_connect();
+$img_dir    = './img/';
+$img = '';
 
 
 if ($request_method === 'POST'){
@@ -35,46 +37,47 @@ if ($request_method === 'POST'){
   }
 }
 
-// エラーがなければ保存
-
-var_dump($_POST['delete']);
-var_dump($_POST['id']);
-var_dump($_POST['submit']);
-var_dump($_POST['sql_kind']);
-var_dump(get_post_data('id'));
-var_dump(get_post_data('sql_kind'));
-/*if ($request_method === 'POST' && count($errors) === 0) {
-  if ($_POST['delete'] === "削除" || $_POST['sql_kind'] === "delete_post") { 
-    $id = $_POST['id'];
-        try {
-          delete_post($link, $id);
-          // リロード対策でリダイレクト
-          header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-          //header('Location: ./controller.php');
-          exit;
-        } catch (PDOException $e) {
-          $errors[] = '削除失敗。理由'.$e->getMessage();
+// アップロード画像ファイルの保存
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // HTTP POST でファイルがアップロードされたかどうかチェック
+  if (is_uploaded_file($_FILES['img']['tmp_name']) === TRUE) {
+    // 画像の拡張子を取得
+    $extension = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+    // 指定の拡張子であるかどうかチェック
+    if ($extension === 'jpg' || $extension === 'jpeg') {
+      // 保存する新しいファイル名の生成（ユニークな値を設定する）
+      $img = sha1(uniqid(mt_rand(), true)). '.' . $extension;
+      // 同名ファイルが存在するかどうかチェック
+      if (is_file($img_dir . $img) !== TRUE) {
+        // アップロードされたファイルを指定ディレクトリに移動して保存
+        if (move_uploaded_file($_FILES['img']['tmp_name'], $img_dir . $img) !== TRUE) {
+            $err_msg[] = 'ファイルアップロードに失敗しました';
         }
+      } else {
+        $err_msg[] = 'ファイルアップロードに失敗しました。再度お試しください。';
       }
-  
-  if (isset($_POST['submit'])){
-  try {
-
-    insert_post($link, $user_name, $user_comment);
-    // リロード対策でリダイレクト
-    header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    exit;
-
-  } catch (PDOException $e) {
-    $errors[] = 'レコード追加失敗。理由'.$e->getMessage();
+    } else {
+      $err_msg[] = 'ファイル形式が異なります。画像ファイルはJPEGのみ利用可能です。';
+    }
+  } else {
+    $err_msg[] = 'ファイルを選択してください';
   }
-} 
 }
-}
-}*/
 
-//コメント削除
-if ($request_method === 'POST' && count($errors) === 0) {
+
+//コメント挿入&削除
+if (isset($_POST['submit'])){
+    try {
+  
+      insert_post($link, $user_name, $user_comment, $img);
+      // リロード対策でリダイレクト
+      header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+      exit;
+  
+    } catch (PDOException $e) {
+      $errors[] = 'レコード追加失敗。理由'.$e->getMessage();
+  }
+} else if ($request_method === 'POST') {
   $sql_kind = get_post_data('sql_kind');
   //$id = $_POST['id'];
   $id = get_post_data('id');
@@ -89,37 +92,6 @@ if ($request_method === 'POST' && count($errors) === 0) {
     }
   }
 }
-
-
-//コメント削除
-/*if ($request_method === 'POST' && count($errors) === 0) {
-  $sql_kind = get_post_data('sql_kind');
-  if ($_POST['delete'] === "削除" || $_POST['sql_kind'] === "delete_post") { 
-    $id = $_SESSION['id'];
-        try {
-          delete_post($link, $id);
-          // リロード対策でリダイレクト
-          header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-          exit;
-        } catch (PDOException $e) {
-          $errors[] = '削除失敗。理由'.$e->getMessage();
-        }
-      }
-    }*/
-
-//コメント挿入(OK)
-/*if (isset($_POST['submit'])){
-    try {
-  
-      insert_post($link, $user_name, $user_comment);
-      // リロード対策でリダイレクト
-      header('Location: http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-      exit;
-  
-    } catch (PDOException $e) {
-      $errors[] = 'レコード追加失敗。理由'.$e->getMessage();
-  }
-}*/
 
 
 // 掲示板の書き込み一覧を取得する

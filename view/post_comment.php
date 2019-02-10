@@ -17,12 +17,12 @@
     <?php } ?>
   </ul>
   <?php } ?>
+  <form method="post" enctype="multipart/form-data">
   <label>名前：<input type="text" name="user_name"></label>
   <label>ひとこと：<input type="text" name="user_comment" size="60"></label>
+  <label>画像：<input type="file" name="img"></label>
   <input type="submit" name="submit" value="送信">
-</form>
-<?php
-?>
+  </form>
   <ul>
     <?php
       // 配列数分繰り返し処理を行う
@@ -30,14 +30,15 @@
     ?>
     <li>
     <form action="./controller.php" method="post">
-    <input type="submit" value="削除"> 
-    <input type="hidden" name="id" value="<?php print $value['id']; ?>">
+    <input type="submit" name="delete" value="削除">
+    <input type="hidden" name="id" value="<?php  print $value['id']; ?>"> 
     <input type="hidden" name="sql_kind" value="delete_post">
-      <?php print $value['user_name'];?>:
+      <?php print $value['user_name'];?>
       <?php print $value['user_comment'];?>
+      <?php print $value['img'];?>
     </form>
     </li>
-    <?php
+    <?php 
       }
     ?>
   </ul>

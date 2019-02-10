@@ -167,15 +167,16 @@ function check_user_comment($user_comment){
 }
 
 //掲示板へ書き込みを追加する
-function insert_post($dbh, $user_name, $user_comment) {
+function insert_post($dbh, $user_name, $user_comment, $img) {
     try {
       // SQL生成
-      $sql = 'INSERT INTO post(user_name, user_comment) VALUES(?, ?)';
+      $sql = 'INSERT INTO post(user_name, user_comment, img) VALUES(?, ?, ?)';
       // SQL文を実行する準備
       $stmt = $dbh->prepare($sql);
       // SQL文のプレースホルダに値をバインド
       $stmt->bindValue(1, $user_name,    PDO::PARAM_STR);
       $stmt->bindValue(2, $user_comment, PDO::PARAM_STR);
+      $stmt->bindValue(3, $img, PDO::PARAM_STR);
       // SQLを実行
       $stmt->execute();
       // レコードの取得
@@ -189,7 +190,7 @@ function insert_post($dbh, $user_name, $user_comment) {
 //掲示板の書き込み一覧を取得する
 function get_post_list($link) {
     // SQL生成
-    $sql = 'SELECT id, user_name, user_comment FROM post order by user_name asc ';
+    $sql = 'SELECT id, user_name, user_comment, img FROM post';
     // クエリ実行
     return get_as_array($link, $sql);
   }
